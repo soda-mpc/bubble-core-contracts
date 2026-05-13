@@ -1,0 +1,15 @@
+{
+  "name": "@sodalabs/bubble-core-contracts",
+  "version": "0.0.1",
+  "description": "Bubble / GC core Solidity contracts with chain-aware address lookup",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/soda-mpc/bubble-core-contracts.git"
+  },
+  "files": [
+    "contracts",
+    "README.md",
+    "LICENSE"
+  ]
+}
