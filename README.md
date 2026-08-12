@@ -6,14 +6,10 @@ App creators install this package and import the Solidity sources directly from 
 
 ## Install
 
-Install from npm:
+Install straight from the repository:
 
-```json
-{
-  "dependencies": {
-    "@sodalabs/bubble-core-contracts": "^0.0.1"
-  }
-}
+```bash
+npm install github:soda-mpc/bubble-core-contracts
 ```
 
 ## Usage
@@ -27,15 +23,19 @@ import "@sodalabs/bubble-core-contracts/contracts/bubble/DecryptionCaller.sol";
 
 Network-specific Bubble core addresses are selected inside the Solidity package by `block.chainid` through `contracts/bubble/BubbleAddresses.sol`. The same app contract source can be compiled and deployed to multiple supported networks without changing imports or package configuration.
 
-Unsupported chains revert with `UnsupportedBubbleChain(chainId)`.
-
 ## Supported Chains
 
-The address registry currently includes:
+`contracts/bubble/BubbleAddresses.sol` resolves addresses for:
 
-- Ethereum mainnet (`1`)
-- Arbitrum One (`42161`)
-- Sepolia (`11155111`)
+| Network | Chain ID |
+| --- | --- |
+| Ethereum mainnet | `1` |
+| Arbitrum One | `42161` |
+| Polygon | `137` |
+| Sepolia | `11155111` |
+| Arbitrum Sepolia | `421614` |
+
+Unsupported chains revert with `UnsupportedBubbleChain(chainId)`.
 
 ## Layout
 
@@ -49,3 +49,7 @@ This package intentionally has no `main`, `exports`, or runtime JavaScript API. 
 ## Versioning
 
 Bump `version` in `package.json` when you cut a release.
+
+## License
+
+Apache License 2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
