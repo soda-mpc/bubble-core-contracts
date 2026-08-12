@@ -52,4 +52,4 @@ Bump `version` in `package.json` when you cut a release.
 
 ## License
 
-MIT. See [LICENSE](./LICENSE).
+Apache License 2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
