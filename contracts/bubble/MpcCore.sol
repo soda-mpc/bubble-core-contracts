@@ -131,6 +131,38 @@ library MpcCore {
         return GCACL(BubbleAddresses.gcAcl()).isContractInsertPermitted(permitter, permittee, contractAddress);
     }
 
+    /// Consumes a user-signed grant so this contract may validateCiphertext on behalf of `user` for the rest of this transaction.
+    /// `nonce` must be the user's current transientInsertNonce and is the value the user signed; GCACL rejects any other
+    /// nonce with TransientInsertInvalidNonce before checking the signature, and increments it on success.
+    ///
+    /// Security note for integrators: the grant binds (nonce, user, this contract) only. It does not bind the sender of
+    /// the transaction, the function being called, or any argument. A signature seen in the mempool can be replayed by
+    /// anyone through any entrypoint of this contract before the intended call lands, and while the grant is live every
+    /// validateCiphertext this contract performs with `userAddress == user` is accepted. Treat every non-signature
+    /// argument of an entrypoint that consumes a grant as attacker-controlled, and never let "a ciphertext labelled with
+    /// `user`" stand in for `user`'s authority over `user`'s balance. Authorization of the action itself belongs in a
+    /// separate user signature over the payload (for example EIP-3009 executeWithAuthorization).
+    function transientInsertPermission(address user, uint256 nonce, bytes memory signature) internal {
+        GCACL(BubbleAddresses.gcAcl()).transientInsertPermission(user, nonce, signature);
+    }
+
+    function isTransientInsertPermitted(address user, address contractAddress) internal view returns (bool) {
+        return GCACL(BubbleAddresses.gcAcl()).isTransientInsertPermitted(user, contractAddress);
+    }
+
+    /// Exactly the check GCHandler applies when tx.origin != userAddress: transient grant OR full insert permission.
+    function isInsertPermitted(address permitter, address permittee) internal view returns (bool) {
+        return GCACL(BubbleAddresses.gcAcl()).isInsertPermitted(permitter, permittee);
+    }
+
+    function transientInsertNonce(address user) internal view returns (uint256) {
+        return GCACL(BubbleAddresses.gcAcl()).transientInsertNonce(user);
+    }
+
+    function transientInsertPermissionDigest(address user, uint256 nonce, address contractAddress) internal view returns (bytes32) {
+        return GCACL(BubbleAddresses.gcAcl()).transientInsertPermissionDigest(user, nonce, contractAddress);
+    }
+
     function permit(gtBool handle, address account) internal {
         GCACL(BubbleAddresses.gcAcl()).permit(gtBool.unwrap(handle), account);
     }

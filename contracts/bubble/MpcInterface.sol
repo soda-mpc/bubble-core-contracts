@@ -62,6 +62,13 @@ interface GCACL {
     function revokeContractInsertPermission(address permittee, address contractAddress) external;
     function isFullInsertPermitted(address permitter, address permittee) external view returns (bool);
     function isContractInsertPermitted(address permitter, address permittee, address contractAddress) external view returns (bool);
+
+    /// Transient insert grant (user-signed, valid for one transaction)
+    function transientInsertPermission(address user, uint256 nonce, bytes calldata signature) external;
+    function isTransientInsertPermitted(address user, address contractAddress) external view returns (bool);
+    function isInsertPermitted(address permitter, address permittee) external view returns (bool);
+    function transientInsertNonce(address user) external view returns (uint256);
+    function transientInsertPermissionDigest(address user, uint256 nonce, address contractAddress) external view returns (bytes32);
 }
 
 interface GCDecryptionVerifier {
