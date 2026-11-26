@@ -167,28 +167,63 @@ library MpcCore {
         GCACL(BubbleAddresses.gcAcl()).permit(gtBool.unwrap(handle), account);
     }
 
+    /// Permits `handle` to `account` only once `confirmations` blocks follow this one (GCACL release block).
+    function permit(gtBool handle, address account, uint32 confirmations) internal {
+        GCACL(BubbleAddresses.gcAcl()).permit(gtBool.unwrap(handle), account, confirmations);
+    }
+
     function permit(gtUint8 handle, address account) internal {
         GCACL(BubbleAddresses.gcAcl()).permit(gtUint8.unwrap(handle), account);
+    }
+
+    /// Permits `handle` to `account` only once `confirmations` blocks follow this one (GCACL release block).
+    function permit(gtUint8 handle, address account, uint32 confirmations) internal {
+        GCACL(BubbleAddresses.gcAcl()).permit(gtUint8.unwrap(handle), account, confirmations);
     }
 
     function permit(gtUint16 handle, address account) internal {
         GCACL(BubbleAddresses.gcAcl()).permit(gtUint16.unwrap(handle), account);
     }
 
+    /// Permits `handle` to `account` only once `confirmations` blocks follow this one (GCACL release block).
+    function permit(gtUint16 handle, address account, uint32 confirmations) internal {
+        GCACL(BubbleAddresses.gcAcl()).permit(gtUint16.unwrap(handle), account, confirmations);
+    }
+
     function permit(gtUint32 handle, address account) internal {
         GCACL(BubbleAddresses.gcAcl()).permit(gtUint32.unwrap(handle), account);
+    }
+
+    /// Permits `handle` to `account` only once `confirmations` blocks follow this one (GCACL release block).
+    function permit(gtUint32 handle, address account, uint32 confirmations) internal {
+        GCACL(BubbleAddresses.gcAcl()).permit(gtUint32.unwrap(handle), account, confirmations);
     }
 
     function permit(gtUint64 handle, address account) internal {
         GCACL(BubbleAddresses.gcAcl()).permit(gtUint64.unwrap(handle), account);
     }
 
+    /// Permits `handle` to `account` only once `confirmations` blocks follow this one (GCACL release block).
+    function permit(gtUint64 handle, address account, uint32 confirmations) internal {
+        GCACL(BubbleAddresses.gcAcl()).permit(gtUint64.unwrap(handle), account, confirmations);
+    }
+
      function permit(gtUint128 handle, address account) internal {
         GCACL(BubbleAddresses.gcAcl()).permit(gtUint128.unwrap(handle), account);
     }
 
+    /// Permits `handle` to `account` only once `confirmations` blocks follow this one (GCACL release block).
+    function permit(gtUint128 handle, address account, uint32 confirmations) internal {
+        GCACL(BubbleAddresses.gcAcl()).permit(gtUint128.unwrap(handle), account, confirmations);
+    }
+
     function permit(gtUint256 handle, address account) internal {
         GCACL(BubbleAddresses.gcAcl()).permit(gtUint256.unwrap(handle), account);
+    }
+
+    /// Permits `handle` to `account` only once `confirmations` blocks follow this one (GCACL release block).
+    function permit(gtUint256 handle, address account, uint32 confirmations) internal {
+        GCACL(BubbleAddresses.gcAcl()).permit(gtUint256.unwrap(handle), account, confirmations);
     }
 
     function permitThis(gtBool handle) internal {
@@ -367,6 +402,18 @@ library MpcCore {
         return (gtUint128.wrap(x), gtUint128.wrap(y));
     }
 
+    /// @notice Verifies the evaluators' signatures over an off-chain burn of a note minted under `key`, and
+    ///         permits the burned quantity to the calling contract. Reverts if they do not verify.
+    /// @dev    The verifier keeps no record of spent notes: the same signed burn verifies again on every
+    ///         call. The calling contract must record `y` and refuse a note it has already spent before it
+    ///         calls this.
+    function verifyNote(gtUint128 key, uint128 y, uint256 qBurned, address user, bytes[] memory signatures) internal returns (gtUint256) {
+        GCDecryptionVerifier(BubbleAddresses.gcDecryptionVerifier()).verifyNote(gtUint128.unwrap(key), y, qBurned, user, signatures);
+        return gtUint256.wrap(qBurned);
+    }
+
+    /// @dev Deprecated: the on-chain burn. Environments with off-chain note burns (Bubble #353) no longer run
+    ///      it, and a call reverts there. Kept so contracts written for it still compile; use {verifyNote}.
     function oprfBurn(gtUint128 key, gtUint128 x, gtUint256 q, uint128 y) internal returns (gtUint256) {
         return gtUint256.wrap(GCExtendedOperations(BubbleAddresses.gcHandler()).
             OprfBurn(gtUint128.unwrap(key), gtUint128.unwrap(x), gtUint256.unwrap(q), y));

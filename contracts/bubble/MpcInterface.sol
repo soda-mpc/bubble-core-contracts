@@ -41,6 +41,8 @@ interface GCExtendedOperations {
 interface GCACL {
 
     function permit(uint256 handle, address account) external;
+    function permit(uint256 handle, address account, uint32 confirmations) external;
+    function releaseBlock(uint256 handle, address account) external view returns (uint64);
     function permitTransient(uint256 handle, address account) external;
     function isPermitted(uint256 handle, address account) external view returns (bool);
     function isPermittedTransient(uint256 handle, address account) external view returns (bool);
@@ -77,4 +79,14 @@ interface GCDecryptionVerifier {
         bytes[] memory decryptedResult,
         bytes[] memory signatures
     ) external returns (bool);
+
+    function verifyNote(uint256 keyHandle, uint128 y, uint256 qBurned, address user, bytes[] calldata signatures) external;
+}
+
+/// @notice What a token whose notes are burned off-chain exposes. Bubble reads the key from the token a burn
+///         names, so which key a note is burned under is the token's choice, never the requester's; the token
+///         must be permitted on the handle it returns.
+interface NoteToken {
+    /// @notice Handle of the OPRF key the token's notes are minted under.
+    function tokenKeyHandle() external view returns (uint256);
 }
